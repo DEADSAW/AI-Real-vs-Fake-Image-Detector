@@ -4,13 +4,18 @@ from torchvision import transforms
 from PIL import Image
 import numpy as np
 from gtts import gTTS
-import tempfile, os, base64, random, datetime, pandas as pd, requests
+import tempfile, os, base64, datetime, pandas as pd, requests
 from streamlit_lottie import st_lottie
+
+# =========================================================
+# PAGE CONFIG (must be FIRST Streamlit command)
+# =========================================================
+st.set_page_config(page_title="AI Image Realness Detector Deluxe", layout="wide")
 
 # =========================================================
 # CONFIG
 # =========================================================
-MODEL_PATH = "ai_real_unified_best_strong.pth"
+MODEL_PATH = "ai_real_unified_best_strong.pth"  # keep in root folder
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 FEEDBACK_LOG = "feedback_log.csv"
 
@@ -22,7 +27,7 @@ def load_model():
     from torchvision import models
     model = models.efficientnet_b0(weights=None)
     model.classifier[1] = torch.nn.Linear(model.classifier[1].in_features, 2)
-    ckpt = torch.load(MODEL_PATH, map_location=DEVICE)
+    ckpt = torch.load(MODEL_PATH, map_location=DEVICE, weights_only=True)
     model.load_state_dict(ckpt["model"] if "model" in ckpt else ckpt)
     model.to(DEVICE).eval()
     return model
@@ -72,42 +77,18 @@ def load_lottieurl(url):
     return None
 
 ai_loader = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_tutvdkg0.json")
+
+# fallback simple loader if link fails
 if ai_loader is None:
     ai_loader = {
-        "v": "5.5.7",
-        "fr": 30,
-        "ip": 0,
-        "op": 60,
-        "w": 200,
-        "h": 200,
-        "nm": "loader",
-        "ddd": 0,
-        "assets": [],
-        "layers": [{
-            "ty": 4,
-            "nm": "circle",
-            "ks": {
-                "o": {"k": 100},
-                "r": {"k": 0},
-                "p": {"k": [100, 100, 0]},
-                "a": {"k": [0, 0, 0]},
-                "s": {"k": [100, 100, 100]}
-            },
-            "shapes": [{
-                "ty": "el",
-                "p": {"k": [0, 0]},
-                "s": {"k": [150, 150]},
-                "nm": "Ellipse Path 1"
-            },
-            {
-                "ty": "st",
-                "c": {"k": [0.1, 0.8, 1, 1]},
-                "o": {"k": 100},
-                "w": {"k": 8},
-                "lc": 2,
-                "lj": 2,
-                "nm": "Stroke 1"
-            }]
+        "v": "5.5.7", "fr": 30, "ip": 0, "op": 60, "w": 200, "h": 200, "nm": "loader",
+        "ddd": 0, "assets": [], "layers": [{
+            "ty": 4, "nm": "circle",
+            "ks": {"o": {"k": 100}, "r": {"k": 0}, "p": {"k": [100, 100, 0]},
+                   "a": {"k": [0, 0, 0]}, "s": {"k": [100, 100, 100]}},
+            "shapes": [{"ty": "el", "p": {"k": [0, 0]}, "s": {"k": [150, 150]}},
+                       {"ty": "st", "c": {"k": [0.1, 0.8, 1, 1]}, "o": {"k": 100},
+                        "w": {"k": 8}, "lc": 2, "lj": 2}]
         }]
     }
 
@@ -130,7 +111,6 @@ def get_voice_html(text, lang="English", autoplay=False):
     tts.save(tmp.name)
     with open(tmp.name, "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
-
     autoplay_attr = "autoplay" if autoplay else ""
     audio_html = f"""
     <audio controls {autoplay_attr} style="width: 100%; margin-top: 10px;">
@@ -138,8 +118,10 @@ def get_voice_html(text, lang="English", autoplay=False):
         Your browser does not support the audio element.
     </audio>
     """
-    try: os.remove(tmp.name)
-    except PermissionError: pass
+    try:
+        os.remove(tmp.name)
+    except PermissionError:
+        pass
     return audio_html
 
 # =========================================================
@@ -155,7 +137,7 @@ def predict_image(img):
     return label, conf
 
 # =========================================================
-# DYNAMIC BACKGROUND (continuous animation)
+# DYNAMIC BACKGROUND
 # =========================================================
 def dynamic_background():
     st.markdown("""
@@ -173,12 +155,11 @@ def dynamic_background():
     </style>
     """, unsafe_allow_html=True)
 
-# =========================================================
-# STYLING
-# =========================================================
-st.set_page_config(page_title="AI Image Realness Detector Deluxe", layout="wide")
 dynamic_background()
 
+# =========================================================
+# UI STYLING
+# =========================================================
 st.markdown("""
 <style>
 h1 {
@@ -237,20 +218,17 @@ footer {
 # HEADER
 # =========================================================
 st.markdown("<h1>🧠 AI Real vs Fake Image Detector Deluxe</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center;color:#ddd;'>Upload one or more images, hear bilingual feedback, and give ratings to help the AI learn.</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center;color:#ddd;'>Upload images, hear results, and give feedback to improve AI accuracy.</p>", unsafe_allow_html=True)
 
 # =========================================================
 # SIDEBAR
 # =========================================================
 lang_option = st.sidebar.radio("🗣️ Voice Output", ["English", "Hindi", "Both"], index=0)
-st.sidebar.markdown("<hr>", unsafe_allow_html=True)
 st.sidebar.info("🎨 Dynamic background runs smoothly and adapts automatically.")
 
 # =========================================================
-# UPLOAD + SUMMARY
+# SUMMARY STATS
 # =========================================================
-uploaded_files = st.file_uploader("📸 Upload images", type=["jpg","jpeg","png"], accept_multiple_files=True)
-
 def display_summary():
     ensure_csv_schema()
     df = pd.read_csv(FEEDBACK_LOG)
@@ -262,12 +240,9 @@ def display_summary():
     avg_conf = df["Confidence"].mean() if total > 0 else 0
     st.markdown(f"""
     <div class='stats-box'>
-    <b>📊 Total:</b> {total} | 
-    ✅ <b>Correct:</b> {correct} | 
-    💡 <b>Real:</b> {real} | 
-    ⚠️ <b>Fake:</b> {fake} | 
-    🎯 <b>Accuracy:</b> {acc:.1f}% | 
-    🔒 <b>Avg Confidence:</b> {avg_conf:.1f}%
+    <b>📊 Total:</b> {total} | ✅ <b>Correct:</b> {correct} |
+    💡 <b>Real:</b> {real} | ⚠️ <b>Fake:</b> {fake} |
+    🎯 <b>Accuracy:</b> {acc:.1f}% | 🔒 <b>Avg Conf:</b> {avg_conf:.1f}%
     </div>
     """, unsafe_allow_html=True)
 
@@ -276,6 +251,8 @@ display_summary()
 # =========================================================
 # MAIN LOGIC
 # =========================================================
+uploaded_files = st.file_uploader("📸 Upload images", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+
 if uploaded_files:
     with st.spinner("Analyzing images..."):
         st_lottie(ai_loader, height=180, key="ai_load")
@@ -291,17 +268,12 @@ if uploaded_files:
             <h3 style='color:{color};text-align:center;'>{file.name}</h3>
             <p style='text-align:center;'>
             <b>Prediction:</b> {label}<br>
-            <b>Confidence:</b> {conf:.2f}%
-            </p>
-            </div>
+            <b>Confidence:</b> {conf:.2f}%</p></div>
             """, unsafe_allow_html=True)
 
             st.image(img, width=350)
 
-            if idx == 0:
-                st.markdown(get_voice_html(f"This image is {label.lower()}.", lang_option, autoplay=True), unsafe_allow_html=True)
-            else:
-                st.markdown(get_voice_html(f"This image is {label.lower()}.", lang_option, autoplay=False), unsafe_allow_html=True)
+            st.markdown(get_voice_html(f"This image is {label.lower()}.", lang_option, autoplay=(idx == 0)), unsafe_allow_html=True)
 
             if label == "Fake":
                 st.markdown("<div style='text-align:center;color:#FF4444;'>⚡ Warning: Looks suspicious!</div>", unsafe_allow_html=True)
@@ -309,18 +281,19 @@ if uploaded_files:
             col1, col2 = st.columns(2)
             with col1:
                 if st.button(f"✅ Prediction Correct ({file.name})", key=f"yes_{file.name}"):
-                    entry = {"Filename": file.name, "Prediction": label, "Correct": "Yes",
-                             "Confidence": conf, "Timestamp": datetime.datetime.now()}
-                    pd.DataFrame([entry]).to_csv(FEEDBACK_LOG, mode='a', index=False, header=False)
+                    pd.DataFrame([{
+                        "Filename": file.name, "Prediction": label, "Correct": "Yes",
+                        "Confidence": conf, "Timestamp": datetime.datetime.now()
+                    }]).to_csv(FEEDBACK_LOG, mode='a', index=False, header=False)
                     st.success("Feedback saved ✅")
             with col2:
                 if st.button(f"❌ Prediction Wrong ({file.name})", key=f"no_{file.name}"):
-                    entry = {"Filename": file.name, "Prediction": label, "Correct": "No",
-                             "Confidence": conf, "Timestamp": datetime.datetime.now()}
-                    pd.DataFrame([entry]).to_csv(FEEDBACK_LOG, mode='a', index=False, header=False)
+                    pd.DataFrame([{
+                        "Filename": file.name, "Prediction": label, "Correct": "No",
+                        "Confidence": conf, "Timestamp": datetime.datetime.now()
+                    }]).to_csv(FEEDBACK_LOG, mode='a', index=False, header=False)
                     st.error("Feedback saved ❌")
 
         display_summary()
 
 st.markdown("<footer>Made with ❤️ by Sangam Rai</footer>", unsafe_allow_html=True)
-
