@@ -10,7 +10,7 @@ from streamlit_lottie import st_lottie
 # =========================================================
 # CONFIG
 # =========================================================
-MODEL_PATH = r"C:\Users\Sangam\AI_RealImage_Detector\models\ai_real_unified_best_strong.pth"
+MODEL_PATH = "ai_real_unified_best_strong.pth"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 FEEDBACK_LOG = "feedback_log.csv"
 
@@ -323,3 +323,4 @@ if uploaded_files:
         display_summary()
 
 st.markdown("<footer>Made with ❤️ by Sangam Rai</footer>", unsafe_allow_html=True)
+
