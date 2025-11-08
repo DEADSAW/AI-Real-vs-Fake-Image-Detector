@@ -9,18 +9,10 @@ The app also features bilingual voice output (English + Hindi), feedback logging
 
 # 🧠 AI Real vs Fake Image Detector Deluxe  
 
-<h1 align="center">🧠 AI Real vs Fake Image Detector Deluxe</h1>
+## 🎬 Live Demo
 
-<p align="center">
-  <video width="90%" controls>
-    <source src="https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/raw/main/DEMO.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</p>
+https://github.com/user-attachments/assets/eb879112-2e15-4b05-ac80-d84995b32061
 
-<p align="center">
-  🎥 <b>Live Demo:</b> <a href="https://fakenreal.streamlit.app/">Try on Streamlit</a>
-</p>
 
 
 > 🎥 **Watch the live demo above**  
@@ -77,20 +69,9 @@ Deployment	Streamlit Cloud / GitHub
 ✅ Automatically saves user feedback for iterative model improvement
 ✅ Works seamlessly both locally and online (Streamlit Cloud)
 
-AI_RealImage_Detector/
-├── app_final_voice_ui_finalpolish.py   # Streamlit app file
-├── models/
-│   └── ai_real_unified_best_strong.pth # Trained model (~15MB)
-├── data_unified/                       # Training & validation data
-├── feedback_log.csv                    # User feedback log
-├── requirements.txt                    # Dependencies
-├── LICENSE                             # Open-source license
-└── README.md                           # Project documentation
 
-🖼️ Demo Preview
 
-Try it Live:
-🔗 Coming soon on Streamlit Cloud...
+
 
 🧠 Model Details
 
@@ -114,7 +95,9 @@ Voice Output → “This image appears to be real.”
 
 1️⃣ Clone the repo
 
-git clone https://github.com/yourusername/AI-Real-Fake-Detector.git
+git clone https://github.com/yourusername/AI-Real-Fake-Detector.git 
+
+
 cd AI-Real-Fake-Detector
 
 2️⃣ Install dependencies
