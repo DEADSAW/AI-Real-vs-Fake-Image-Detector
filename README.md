@@ -9,9 +9,19 @@ The app also features bilingual voice output (English + Hindi), feedback logging
 
 # 🧠 AI Real vs Fake Image Detector Deluxe  
 
-<video width="100%" controls>
-  <source src="https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/raw/main/DEMO.mp4" type="video/mp4">
-</video>
+<h1 align="center">🧠 AI Real vs Fake Image Detector Deluxe</h1>
+
+<p align="center">
+  <video width="90%" controls>
+    <source src="https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/raw/main/DEMO.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</p>
+
+<p align="center">
+  🎥 <b>Live Demo:</b> <a href="https://fakenreal.streamlit.app/">Try on Streamlit</a>
+</p>
+
 
 > 🎥 **Watch the live demo above**  
 > 🌐 [**Try the live app on Streamlit →**](https://fakenreal.streamlit.app/)
@@ -30,10 +40,10 @@ It’s built with **PyTorch** + **Streamlit**, featuring dynamic UI, bilingual (
 ![Upload Screenshot](https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/blob/main/Screenshot%202025-11-09%20015159.png)
 
 ### 🎯 Prediction Result Panel  
-![Result Screenshot]https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/blob/main/Screenshot%202025-11-09%20015236.png
+![Result Screenshot](https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/blob/main/Screenshot%202025-11-09%20015236.png)
 
 ### 📊 Live Stats Dashboard  
-![Stats Screenshot]https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/blob/main/Screenshot%202025-11-09%20015236.png
+![Stats Screenshot](https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/blob/main/Screenshot%202025-11-09%20015236.png)
 
 
 
