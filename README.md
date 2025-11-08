@@ -6,6 +6,51 @@ It uses a fine-tuned EfficientNet-B0 model built with PyTorch, presented through
 The model analyzes facial symmetry, pixel texture, and generative inconsistencies often found in AI-created visuals.
 The app also features bilingual voice output (English + Hindi), feedback logging, and animated UI for a highly interactive user experience.
 
+
+# 🧠 AI Real vs Fake Image Detector Deluxe  
+
+<video width="100%" controls>
+  <source src="https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/raw/main/DEMO.mp4" type="video/mp4">
+</video>
+
+> 🎥 **Watch the live demo above**  
+> 🌐 [**Try the live app on Streamlit →**](https://fakenreal.streamlit.app/)
+
+---
+
+## 🧠 About the Project
+An advanced deep-learning web app that detects whether an uploaded image is **AI-generated (Fake)** or **Real**.  
+It’s built with **PyTorch** + **Streamlit**, featuring dynamic UI, bilingual (Hindi + English) voice feedback, and real-time user interaction logging.
+
+---
+
+## 🖼️ Screenshots
+
+### 🧩 Upload Interface  
+![Upload Screenshot](https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/blob/main/Screenshot%202025-11-09%20015159.png)
+
+### 🎯 Prediction Result Panel  
+![Result Screenshot]https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/blob/main/Screenshot%202025-11-09%20015236.png
+
+### 📊 Live Stats Dashboard  
+![Stats Screenshot]https://github.com/DEADSAW/AI-Real-vs-Fake-Image-Detector/blob/main/Screenshot%202025-11-09%20015236.png
+
+
+
+
+
+## ✨ Key Features
+✅ Detects **AI-generated vs Real** images using fine-tuned EfficientNet-B0  
+✅ **Dynamic animated UI** with gradient background  
+✅ **Bilingual voice feedback** (English + Hindi)  
+✅ **Multi-image upload support**  
+✅ **Real-time accuracy tracking** with user feedback buttons  
+✅ Optimized for **Streamlit Cloud deployment**
+
+
+
+
+
 ⚙️ Tech Stack
 Component	Technology Used
 Frontend	Streamlit, HTML/CSS Animations
